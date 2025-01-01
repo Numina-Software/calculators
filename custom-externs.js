@@ -1,2 +1,0 @@
-let caches;
-let localStorage;

@@ -42,6 +42,7 @@ static char bufferXML[1000000];
 #endif
 void showSumTwoSquares(void);
 void showDivisors(void);
+// void divisors(void);
 void dilogText(const char *baseText, const char *powerText, const char *modText, int groupLen);
 void gaussianText(char *valueText, int doFactorization);
 void ecmFrontText(char *tofactorText, bool doFactorization, char *knownFactors);
@@ -69,9 +70,19 @@ extern bool skipPrimality;
 BigInteger dividend;
 BigInteger divisor;
 BigInteger quotient;
+
+
+// char* Divisors(int argc, char* argv[]) {
+//   (void)argc;
+//   ecmFrontText(argv[1], true, NULL);
+//   divisors();
+//   printf("%s\n", output);
+//   return output;
+// }
+
 int main(int argc, char* argv[])
 {
-  (void)argc;  // Parameter is not used. 
+  (void)argc;  // Parameter is not used.
 #if DEBUG_CODE == 1
   fsquaresText(argv[1], 6);
   (void)printf("%s\n", output);

@@ -189,7 +189,7 @@ void int2hex(char **pOutput, int nbr)
 }
 #endif
 
-static int Bin2HexLoop(char** ppDecimal, const limb* binary, 
+static int Bin2HexLoop(char** ppDecimal, const limb* binary,
   int currentGroupDigit, int nbrBits, int nbrLimbs, int mask, int grpLen)
 {
   int nbrHexDigits = (nbrBits + 3) / 4;
@@ -437,18 +437,18 @@ void Bin2Dec(char **ppDecimal, const limb *binary, int nbrLimbs, int groupLength
     *ptrDest = '0';
     ptrDest++;
   }
-  else
-  {
-    if ((digits > 30) && showDigitsText)
-    {
-      *ptrDest = ' ';
-      ptrDest++;
-      *ptrDest = '(';
-      ptrDest++;
-      int2dec(&ptrDest, digits);
-      copyStr(&ptrDest, (lang ? " dígitos)" : " digits)"));
-    }
-  }
+  // else
+  // {
+  //   if ((digits > 30) && showDigitsText)
+  //   {
+  //     *ptrDest = ' ';
+  //     ptrDest++;
+  //     *ptrDest = '(';
+  //     ptrDest++;
+  //     int2dec(&ptrDest, digits);
+  //     copyStr(&ptrDest, (lang ? " dígitos)" : " digits)"));
+  //   }
+  // }
   *ptrDest = '\0';             // Add terminator.
   *ppDecimal = ptrDest;
 }

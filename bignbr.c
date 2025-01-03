@@ -52,7 +52,7 @@ extern limb Mult4[MAX_LEN];
 extern int valueQ[MAX_LEN];
 extern limb TestNbr[MAX_LEN];
 extern limb MontgomeryMultR1[MAX_LEN];
-int groupLen = 6;
+int groupLen = 1000;
 int smallPrimes[SMALL_PRIMES_ARRLEN+1];
 #ifdef __EMSCRIPTEN__
 int percentageBPSW;
@@ -125,7 +125,7 @@ void BigIntChSign(BigInteger *value)
   }
 }
 
-static void InternalBigIntAdd(const BigInteger *pAdd1, const BigInteger *pAdd2, 
+static void InternalBigIntAdd(const BigInteger *pAdd1, const BigInteger *pAdd2,
   BigInteger *pSum, enum eSign addend2sign)
 {
   const BigInteger* pAddend1 = pAdd1;
@@ -896,7 +896,7 @@ void subtractdivide(BigInteger *pBigInt, int subt, int divisor)
     for (int ctr = 1; ctr < nbrLimbs; ctr++)
     {  // Process starting from least significant limb.
       unsigned int nextLimb = (unsigned int)(ptrDest + 1)->x;
-      ptrDest->x = UintToInt(((curLimb >> 1) | (nextLimb << BITS_PER_GROUP_MINUS_1)) & 
+      ptrDest->x = UintToInt(((curLimb >> 1) | (nextLimb << BITS_PER_GROUP_MINUS_1)) &
         MAX_VALUE_LIMB);
       ptrDest++;
       curLimb = nextLimb;
@@ -917,7 +917,7 @@ void subtractdivide(BigInteger *pBigInt, int subt, int divisor)
       int64_t quotient = numerator / divisor;
       remainder = (int)(numerator - (divisor * quotient));
 #else
-      unsigned int dividend = ((unsigned int)remainder << BITS_PER_GROUP) + 
+      unsigned int dividend = ((unsigned int)remainder << BITS_PER_GROUP) +
         (unsigned int)pLimbs->x;
       double dDividend = ((double)remainder * dLimb) + (double)pLimbs->x;
       double dQuotient = (dDividend * dInvDivisor) + 0.5;
@@ -1170,7 +1170,7 @@ void multadd(BigInteger *pResult, int iMult, const BigInteger *pMult, int addend
 
 // Compute *pResult -> *pMult1 * iMult1 + *pMult2 * iMult2
 // Use Temp as temporary variable.
-void addmult(BigInteger *pResult, const BigInteger *pMult1, int iMult1, 
+void addmult(BigInteger *pResult, const BigInteger *pMult1, int iMult1,
   const BigInteger *pMult2, int iMult2)
 {
   multint(pResult, pMult1, iMult1);
@@ -1419,7 +1419,7 @@ static void checkProcessExpon(const BigInteger *pBigNbr, int currExpon,
 
 // This routine checks whether the number pointed by pNbr is
 // a perfect power. If it is not, it returns one.
-// If it is a perfect power, it returns the exponent and 
+// If it is a perfect power, it returns the exponent and
 // it fills the buffer pointed by pBase with the base.
 int PowerCheck(const BigInteger *pBigNbr, BigInteger *pBase)
 {
@@ -1640,7 +1640,7 @@ int PowerCheck(const BigInteger *pBigNbr, BigInteger *pBase)
     for (;;)
     {   // Check whether the approximate root is actually exact.
       (void)BigIntPowerIntExp(pBase, Exponent-1, &Temp3); // Temp3 <- x^(e-1)
-      (void)BigIntMultiply(&Temp3, pBase, &Temp2);        // Temp2 <- x^e 
+      (void)BigIntMultiply(&Temp3, pBase, &Temp2);        // Temp2 <- x^e
       BigIntSubt(pBigNbr, &Temp2, &Temp2);            // Compare to radicand.
       if (BigIntIsZero(&Temp2))
       {                     // Perfect power, so go out.
@@ -1795,7 +1795,7 @@ void DivideBigNbrByMaxPowerOf2(int *pShRight, limb *number, int *pNbrLimbs)
   }
   if (index2 < nbrLimbs)
   {
-    number[index2].x = UintToInt(((unsigned int)number[index2].x >> shRight) 
+    number[index2].x = UintToInt(((unsigned int)number[index2].x >> shRight)
       & MAX_VALUE_LIMB);
   }
   if (index > 0)
@@ -1874,7 +1874,7 @@ int BigIntJacobiSymbol(const BigInteger *upper, const BigInteger *lower)
       t = -t;
     }
     (void)BigIntRemainder(&a, &m, &tmp);
-    CopyBigInt(&a, &tmp);              // a <- a % m  
+    CopyBigInt(&a, &tmp);              // a <- a % m
   }
   if ((m.nbrLimbs == 1) && (m.limbs[0].x == 1))
   {              // Absolute value of m is 1.
@@ -2134,7 +2134,7 @@ static int PerformStrongLucasTest(const BigInteger* pValue, int D, int absQ, int
           AddBigNbrMod(Mult4, Mult1, Mult4);   // V <- V - Q^k
           AddBigNbrMod(Mult4, Mult1, Mult4);   // V <- V - Q^k
         }
-        signPowQ = 1;                          // Indicate it is positive. 
+        signPowQ = 1;                          // Indicate it is positive.
         modmult(Mult1, Mult1, Mult1);          // Square power of Q.
       }
       if (((unsigned int)groupExp & mask) != 0U)

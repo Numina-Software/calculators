@@ -465,7 +465,7 @@ static void Cunningham(struct sFactors *pstFactors, const BigInteger *BigBase, i
       if (((Expon / k) % 2) != 0)
       { /* Only for odd exponent */
         (void)BigIntPowerIntExp(BigBase, k, &Nbr1);
-        addbigint(&Nbr1, increment); 
+        addbigint(&Nbr1, increment);
         BigIntGcd(&Nbr1, BigOriginal, &Nbr2);   // Nbr2 <- gcd(Base^k+incre, original)
         insertBigFactor(pstFactors, &Nbr2, TYP_TABLE);
         CopyBigInt(&Temp1, BigOriginal);
@@ -530,12 +530,12 @@ static bool ProcessExponent(struct sFactors *pstFactors, const BigInteger *numTo
       for (;;)
       {
         // Compute rootN1 as nthRoot ^ (Exponent-1)
-        (void)BigIntPowerIntExp(&nthRoot, Exponent - 1, &rootN1); 
+        (void)BigIntPowerIntExp(&nthRoot, Exponent - 1, &rootN1);
         // Compute rootN as nthRoot ^ Exponent
         (void)BigIntMultiply(&nthRoot, &rootN1, &rootN);
         // Compute dif as NFp1 - rootN. If this difference is zero,
         // nthRoot is a perfect power.
-        BigIntSubt(&NFp1, &rootN, &dif);            
+        BigIntSubt(&NFp1, &rootN, &dif);
         if (BigIntIsZero(&dif))
         { // Perfect power
           Cunningham(pstFactors, &nthRoot, Exponent, delta, numToFactor);
@@ -767,7 +767,7 @@ static void insertAlgebraicFactorPlus(int expon, int divExpon, struct sFactors* 
   }
 }
 
-static void attemptEvenExpAlgebFactors(int expon, const int *ptrCoeff, 
+static void attemptEvenExpAlgebFactors(int expon, const int *ptrCoeff,
   struct sFactors* pstFactors)
 {
   const int* ptrCurrCoeff;
@@ -1060,7 +1060,7 @@ static void Lehman(const BigInteger *nbr, int multiplier, BigInteger *factor)
 #ifdef __EMSCRIPTEN__
 char *ShowFactoredPart(const BigInteger *pNbr, const struct sFactors* pstFactors)
 {
-  ptrLowerText = lowerText;
+  ptrLowerText = dumpoutput;
   *ptrLowerText = '3';
   ptrLowerText++;
   if ((pstFactors != NULL) && (pstFactors->multiplicity > 1))
@@ -1140,7 +1140,7 @@ static void performFactorization(const BigInteger *numToFactor, const struct sFa
   (void)memset(common.ecm.W4, 0, NumberLengthBytes);
   (void)memset(common.ecm.GD, 0, NumberLengthBytes);
 #ifdef __EMSCRIPTEN__
-  ptrLowerText = ShowFactoredPart(numToFactor, pstFactors);
+  // ptrLowerText = ShowFactoredPart(numToFactor, pstFactors);
 #endif
   EC--;
   foundByLehman = false;
@@ -1209,7 +1209,8 @@ static void performFactorization(const BigInteger *numToFactor, const struct sFa
 void SendFactorizationToOutput(const struct sFactors *pstFactors, char **pptrOutput,
   bool doFactorization, bool onlyFactor)
 {
-  char *ptrOutput = *pptrOutput;
+  char *ptrOutput = dumpoutput;
+  // char *ptrOutput = *pptrOutput;
   copyStr(&ptrOutput, tofactorDec);
   if (!doFactorization)
   {
@@ -1389,7 +1390,7 @@ void SendFactorizationToOutput(const struct sFactors *pstFactors, char **pptrOut
     }
     pstFactor++;
   }
-  *pptrOutput = ptrOutput;
+  // *pptrOutput = ptrOutput;
 }
 
 static void SortFactors(struct sFactors *pstFactors)
@@ -2077,7 +2078,7 @@ void factor(const BigInteger* toFactor, const int* number, int* factors, struct 
 
 // pstFactors -> ptrFactor points to end of factors.
 // pstFactors -> multiplicity indicates the number of different factors.
-void factorExt(const BigInteger *toFactor, const int *number, 
+void factorExt(const BigInteger *toFactor, const int *number,
   int *factors, struct sFactors *pstFactors, char *pcKnownFactors)
 {
   char* ptrKnownFactors = pcKnownFactors;

@@ -158,7 +158,7 @@ static bool TryToFindSqRootMinus1(BigInteger* pTmp1, BigInteger* pTmp2,
     // Mult1 = base^pTmp3.
     modPowBaseInt(base, pTmp3->limbs, powerLen, pTmp1->limbs);
 #ifdef __EMSCRIPTEN__
-    lModularMult++;   // Increment number of modular exponentiations.    
+    lModularMult++;   // Increment number of modular exponentiations.
 #endif
     for (int i = 0; i < shRightPower; i++)
     {              // Loop that squares number.
@@ -473,7 +473,7 @@ static void ComputeSumOfFourSquaresForPrime(void)
   CopyBigInt(&Mult4, &M8);
 }
 
-// If p = Mult1^2 + Mult2^2 + Mult3^2 + Mult4^2 and 
+// If p = Mult1^2 + Mult2^2 + Mult3^2 + Mult4^2 and
 // q = Quad1^2 + Quad2^2 + Quad3^2 + Quad4^2,
 // compute new values of Quad1, Quad2, Quad3 and Quad4 such that:
 // pq = Quad1^2 + Quad2^2 + Quad3^2 + Quad4^2.
@@ -928,7 +928,7 @@ void showSumTwoSquares(void)
   int sumSquaresNbr;
   int nbrExponents = common.k.sumSquares.nbrIndexes;
   int* ptrFoundSumSquares = common.k.sumSquares.foundSumSquares;
-  char* ptrOutput = output;
+  char* ptrOutput = dumpoutput;
   if (common.k.sumSquares.initPending)
   {
     (void)memset(&common.k.sumSquares.currentExp, 0,

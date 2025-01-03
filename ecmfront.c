@@ -311,7 +311,7 @@ static void GetMobius(char **pptrOutput)
 
 void ecmFrontText(char *tofactorText, bool performFactorization, char *factors)
 {
-  char *ptrOutput;
+  char *ptrOutput = dumpoutput;
   bool isBatch;
   knownFactors = factors;
   if (valuesProcessed == 0)
@@ -341,7 +341,7 @@ void ecmFrontText(char *tofactorText, bool performFactorization, char *factors)
     if (tofactor.sign == SIGN_POSITIVE)
     {        // Number to factor is non-negative.
 #ifdef __EMSCRIPTEN__
-      char* ptrText;
+      char* ptrText = dumpoutput;
 #endif
       if (!BigIntIsZero(&tofactor))
       {      // Number to factor is not zero.
@@ -350,15 +350,15 @@ void ecmFrontText(char *tofactorText, bool performFactorization, char *factors)
         GetEulerTotient(&ptrOutput);
         GetMobius(&ptrOutput);
       }
-#ifdef __EMSCRIPTEN__
-      StepECM = 3;   // Show progress (in percentage) of sum of squares.
-      ptrText = ShowFactoredPart(&tofactor, astFactorsMod);
-      beginLine(&ptrText);
-      copyStr(&ptrText, lang ? "<p>Hallando suma de cuadrados.</p>" :
-        "<p>Searching for sum of squares.</p>");
-      ShowLowerText();
-      sumSquaresModMult = lModularMult;
-#endif
+// #ifdef __EMSCRIPTEN__
+//       StepECM = 3;   // Show progress (in percentage) of sum of squares.
+//       ptrText = ShowFactoredPart(&tofactor, astFactorsMod);
+//       beginLine(&ptrText);
+//       copyStr(&ptrText, lang ? "<p>Hallando suma de cuadrados.</p>" :
+//         "<p>Searching for sum of squares.</p>");
+//       ShowLowerText();
+//       sumSquaresModMult = lModularMult;
+// #endif
       ComputeFourSquares(astFactorsMod);
       ShowFourSquares(&ptrOutput);
 #ifdef __EMSCRIPTEN__
@@ -366,11 +366,11 @@ void ecmFrontText(char *tofactorText, bool performFactorization, char *factors)
       StepECM = 0;   // Do not show progress.
 #endif
     }
-#ifdef __EMSCRIPTEN__
-    copyStr(&ptrOutput, "<div id=\"divisors\"><p><button type=\"button\" id=\"showdiv\">");
-    copyStr(&ptrOutput, lang? "Mostrar divisores": "Show divisors");
-    copyStr(&ptrOutput, "</button></p></div>");
-#endif
+// #ifdef __EMSCRIPTEN__
+//     copyStr(&ptrOutput, "<div id=\"divisors\"><p><button type=\"button\" id=\"showdiv\">");
+//     copyStr(&ptrOutput, lang? "Mostrar divisores": "Show divisors");
+//     copyStr(&ptrOutput, "</button></p></div>");
+// #endif
     beginLine(&ptrOutput);
     showElapsedTime(&ptrOutput);
     finishLine(&ptrOutput);
@@ -577,6 +577,152 @@ void heapsort(int count, int** pptrBigInts)
   }
 }
 
+// // In order to minimize multiplications of big numbers, Gray code is used.
+// void divisors(void)
+// {
+//   bool showMoreDivisors = true;
+//   int nbrDivisors;
+//   int divisorNbr;
+//   int nbrExponents = astFactorsMod[0].multiplicity;
+//   int* ptrFoundDivisors = common.k.divisors.foundDivisors;
+//   char *ptrOutput = output;
+//   *ptrOutput = 'D';      // Indicate this output is the list of divisors.
+//   ptrOutput++;
+//   copyStr(&ptrOutput, "[");
+//   if ((tofactor.nbrLimbs == 1) && (tofactor.limbs[0].x <= 1))
+//   {
+//     if (tofactor.limbs[0].x == 0)
+//     {
+
+//     }
+//     else
+//     {
+//       copyStr(&ptrOutput, "\"1\"]");
+//     }
+//     return;
+//   }
+//   if (nbrExponents > 50)
+//   {                      // Process only the first 50 exponents.
+//     nbrExponents = 50;
+//   }
+//   int nbrDivisorsCurrDivisor = 0;
+//   for (int currExp = 0; currExp < nbrExponents; currExp++)
+//   {
+//     nbrDivisorsCurrDivisor += common.k.divisors.currentExp[currExp];
+//   }
+//   for (divisorNbr = 0; divisorNbr < 1000; divisorNbr++)
+//   {
+//     int exponentNbr;
+//     int arrLen;
+//     const struct sFactors* pstFactors;
+//     if (ptrFoundDivisors > &common.k.divisors.foundDivisors[900000])
+//     {
+//       break;             // Divisors are very large.
+//     }
+//     common.k.divisors.ptrFoundDivisors[divisorNbr] = ptrFoundDivisors;
+//     NumberLength = common.k.divisors.divisor.nbrLimbs;
+//     if (divisorNbr == 0)
+//     {
+//       BigInteger2IntArray(ptrFoundDivisors, &common.k.divisors.divisor);
+//     }
+//     arrLen = 1 + common.k.divisors.divisor.nbrLimbs;
+//     ptrFoundDivisors += arrLen;
+
+//     pstFactors = &astFactorsMod[1];
+//     // Find next divisor.
+//     for (exponentNbr = 0; exponentNbr < nbrExponents; exponentNbr++)
+//     {
+//       if (common.k.divisors.currentExpGray[exponentNbr] == 0)
+//       {  // Ascending exponents.
+//         if (common.k.divisors.currentExp[exponentNbr] <
+//           pstFactors->multiplicity)
+//         {
+//           common.k.divisors.currentExp[exponentNbr]++;
+//           nbrDivisorsCurrDivisor++;
+//           NumberLength = *pstFactors->ptrFactor;
+//           IntArray2BigInteger(pstFactors->ptrFactor, &Tmp);
+//           (void)BigIntMultiply(&common.k.divisors.divisor, &Tmp,
+//             &common.k.divisors.divisor);
+//           NumberLength = common.k.divisors.divisor.nbrLimbs;
+//           BigInteger2IntArray(ptrFoundDivisors, &common.k.divisors.divisor);
+//           if (nbrDivisorsCurrDivisor == 1)
+//           {       // Mark prime numbers as negative.
+//             *ptrFoundDivisors = -*ptrFoundDivisors;
+//           }
+//           break;
+//         }
+//       }
+//       else
+//       {  // Descending exponents.
+//         if (common.k.divisors.currentExp[exponentNbr] > 0)
+//         {
+//           common.k.divisors.currentExp[exponentNbr]--;
+//           nbrDivisorsCurrDivisor--;
+//           NumberLength = *pstFactors->ptrFactor;
+//           IntArray2BigInteger(pstFactors->ptrFactor, &Tmp);
+//           (void)BigIntDivide(&common.k.divisors.divisor, &Tmp,
+//             &common.k.divisors.divisor);
+//           NumberLength = common.k.divisors.divisor.nbrLimbs;
+//           BigInteger2IntArray(ptrFoundDivisors, &common.k.divisors.divisor);
+//           if (nbrDivisorsCurrDivisor == 1)
+//           {       // Mark prime numbers as negative.
+//             *ptrFoundDivisors = -*ptrFoundDivisors;
+//           }
+//           break;
+//         }
+//       }
+//       common.k.divisors.currentExpGray[exponentNbr] ^= 1;
+//       pstFactors++;
+//     }
+//     if (exponentNbr == nbrExponents)
+//     {           // All exponents processed.
+//       showMoreDivisors = false;
+//       divisorNbr++;
+//       break;
+//     }
+//   }
+//   // Sort factors.
+//   nbrDivisors = divisorNbr;
+//   heapsort(nbrDivisors, common.k.divisors.ptrFoundDivisors);
+//   // Generate output from sorted divisors.
+//   for (divisorNbr = 0; divisorNbr < nbrDivisors; divisorNbr++)
+//   {
+//     const int* ptrIntArray = common.k.divisors.ptrFoundDivisors[divisorNbr];
+//     NumberLength = *ptrIntArray;
+//     if (NumberLength < 0)
+//     {    // If prime, convert it to positive.
+//       NumberLength = -NumberLength;
+//     }
+//     IntArray2BigInteger(common.k.divisors.ptrFoundDivisors[divisorNbr], &Tmp);
+//     copyStr(&ptrOutput, "\"");
+//     if (hexadecimal)
+//     {
+//       Bin2Hex(&ptrOutput, (const limb *)ptrIntArray + 1, NumberLength, groupLen);
+//     }
+//     else
+//     {
+//       Bin2Dec(&ptrOutput, (const limb*)ptrIntArray + 1, NumberLength, groupLen);
+//     }
+//     if (*ptrIntArray < 0)
+//     {
+//       copyStr(&ptrOutput, "*");
+//     }
+//     copyStr(&ptrOutput, divisorNbr == nbrDivisors - 1 ? "\"" : "\",\n");
+//   }
+//   copyStr(&ptrOutput, "]");
+
+// }
+
+
+
+
+
+
+
+
+
+
+
 // In order to minimize multiplications of big numbers, Gray code is used.
 void showDivisors(void)
 {
@@ -588,18 +734,16 @@ void showDivisors(void)
   char *ptrOutput = output;
   *ptrOutput = 'D';      // Indicate this output is the list of divisors.
   ptrOutput++;
-  copyStr(&ptrOutput, lang ? "<p>Lista de divisores:</p><ul>" :
-    "<p>List of divisors:</p><ul>");
+  copyStr(&ptrOutput, "[");
   if ((tofactor.nbrLimbs == 1) && (tofactor.limbs[0].x <= 1))
   {
     if (tofactor.limbs[0].x == 0)
     {
-      copyStr(&ptrOutput, lang? "<li>Cualquier número natural</li></ul>":
-        "<li>Any natural number</li></ul>");
+
     }
     else
     {
-      copyStr(&ptrOutput, "<li>1</li></ul>");
+      copyStr(&ptrOutput, "\"1\"]");
     }
     return;
   }
@@ -687,7 +831,7 @@ void showDivisors(void)
   nbrDivisors = divisorNbr;
   heapsort(nbrDivisors, common.k.divisors.ptrFoundDivisors);
   // Generate output from sorted divisors.
-  for (divisorNbr = 0; divisorNbr < nbrDivisors; divisorNbr++)
+   for (divisorNbr = 0; divisorNbr < nbrDivisors; divisorNbr++)
   {
     const int* ptrIntArray = common.k.divisors.ptrFoundDivisors[divisorNbr];
     NumberLength = *ptrIntArray;
@@ -696,7 +840,7 @@ void showDivisors(void)
       NumberLength = -NumberLength;
     }
     IntArray2BigInteger(common.k.divisors.ptrFoundDivisors[divisorNbr], &Tmp);
-    copyStr(&ptrOutput, "<li>");
+    copyStr(&ptrOutput, "\"");
     if (hexadecimal)
     {
       Bin2Hex(&ptrOutput, (const limb *)ptrIntArray + 1, NumberLength, groupLen);
@@ -707,20 +851,12 @@ void showDivisors(void)
     }
     if (*ptrIntArray < 0)
     {
-      copyStr(&ptrOutput, lang ? " (primo)" : " (prime)");
+      copyStr(&ptrOutput, "*");
     }
-    copyStr(&ptrOutput, "</li>");
+    copyStr(&ptrOutput, divisorNbr == nbrDivisors - 1 ? "\"" : "\",\n");
   }
-  copyStr(&ptrOutput, "</ul>");
-  if (showMoreDivisors)
-  {
-#ifdef __EMSCRIPTEN__
-    copyStr(&ptrOutput, "<p><button type=\"button\" id=\"showdiv\">");
-    copyStr(&ptrOutput, lang ? "Mostrar más divisores" : "Show more divisors");
-    copyStr(&ptrOutput, "</button></p>");
-#endif
-    output[0] = 'E';    // Indicate button present.
-  }
+  copyStr(&ptrOutput, "]");
+
 }
 
 #ifndef _MSC_VER
@@ -771,7 +907,7 @@ EXTERNALIZE void doWork(void)
     ptrData++;
     flags = -*ptrData;
   }
-#ifndef lang  
+#ifndef lang
   lang = ((flags & 1)? true: false);
 #endif
   useBlockly = false;

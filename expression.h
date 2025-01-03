@@ -29,7 +29,7 @@ int stamp(void);
 #if defined _USING64BITS_ && defined __EMSCRIPTEN__ && !defined _MSC_VER
 #define EXTERNALIZE  __attribute__((visibility("default")))
 #else
-#define EXTERNALIZE	
+#define EXTERNALIZE
 #endif
 void databack(const char *data);
 
@@ -129,11 +129,12 @@ enum eParseExpr
   PARSE_EXPR_POLYNOMIAL,
 };
 
-#ifndef lang  
+#ifndef lang
   extern bool lang;
 #endif
 extern char inputString[1000000];
 extern char output[3000000];
+extern char dumpoutput[3000000];
 extern BigInteger valueX;
 extern int counterC;
 extern int expressionNbr;

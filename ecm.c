@@ -655,7 +655,7 @@ static enum eEcmResult ecmStep2(void)
     (void)memcpy(common.ecm.Zaux, common.ecm.Z, NumberSizeBytes);  //         from step 1)
     (void)memcpy(common.ecm.GcdAccumulated, MontgomeryMultR1, NumberSizeBytes);
     (void)memcpy(common.ecm.UX, common.ecm.X, NumberSizeBytes);
-    (void)memcpy(common.ecm.UZ, common.ecm.Z, NumberSizeBytes);  // (UX:UZ) -> Q 
+    (void)memcpy(common.ecm.UZ, common.ecm.Z, NumberSizeBytes);  // (UX:UZ) -> Q
     (void)ModInvBigNbr(common.ecm.Z, common.ecm.Aux1, TestNbr, NumberLength);
     modmult(common.ecm.Aux1, common.ecm.X, common.ecm.root[0]); // root[0] <- X/Z (Q)
     J = 0;
@@ -763,7 +763,7 @@ static enum eEcmResult ecmStep2(void)
     for (indexM = 0; indexM <= maxIndexM; indexM++)
     {
       if (indexM >= Qaux)
-      { // If inside step 2 range... 
+      { // If inside step 2 range...
         if (indexM == 0)
         {
           bool rc = ModInvBigNbr(common.ecm.UZ, common.ecm.Aux3, TestNbr, NumberLength);
@@ -940,7 +940,7 @@ enum eEcmResult ecmCurve(int *pEC, int *pNextEC)
         (void)memcpy(common.ecm.GD, TestNbr, NumberSizeBytes);
         return CHANGE_TO_SIQS;
       }
-      if ((nbrDigits > 30) && (nbrDigits <= 90))  // If between 30 and 90 digits...         
+      if ((nbrDigits > 30) && (nbrDigits <= 90))  // If between 30 and 90 digits...
       {                             // Switch to SIQS.
         int limit = limits[(nbrDigits - 31) / 5];
         if ((EC % 50000000) >= limit)
@@ -989,17 +989,17 @@ enum eEcmResult ecmCurve(int *pEC, int *pNextEC)
       nbrPrimes = 726517; /* Number of primes less than 11000000 */
 #endif
     }
-#ifdef __EMSCRIPTEN__
-    ptrText = ptrLowerText;  // Point after number that is being factored.
-    copyStr(&ptrText, lang ? "<p>Curva " : "<p>Curve ");
-    int2dec(&ptrText, EC);   // Show curve number.
-    copyStr(&ptrText, lang ? " usando límites B1=" : " using bounds B1=");
-    int2dec(&ptrText, boundStep1);   // Show first bound.
-    copyStr(&ptrText, lang ? " y B2=" : " and B2=");
-    int2dec(&ptrText, boundStep2);   // Show second bound.
-    copyStr(&ptrText, "</p>");
-    databack(lowerText);
-#endif
+// #ifdef __EMSCRIPTEN__
+//     ptrText = ptrLowerText;  // Point after number that is being factored.
+//     copyStr(&ptrText, lang ? "<p>Curva " : "<p>Curve ");
+//     int2dec(&ptrText, EC);   // Show curve number.
+//     copyStr(&ptrText, lang ? " usando límites B1=" : " using bounds B1=");
+//     int2dec(&ptrText, boundStep1);   // Show first bound.
+//     copyStr(&ptrText, lang ? " y B2=" : " and B2=");
+//     int2dec(&ptrText, boundStep2);   // Show second bound.
+//     copyStr(&ptrText, "</p>");
+//     databack(lowerText);
+// #endif
 
     //  Compute A0 <- 2 * (EC+1)*modinv(3 * (EC+1) ^ 2 - 1, N) mod N
                                                // Aux2 <- 1 in Montgomery notation.

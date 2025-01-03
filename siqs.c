@@ -99,7 +99,7 @@ static void ShowSIQSInfo(int timeSieve, int nbrCongruencesFound, int matrixBLeng
   float fPercentage = (float)nbrCongruencesFound * 100.0f / (float)matrixBLength;
   int percentage = (int)fPercentage;
   int temp = matrixBLength - nbrCongruencesFound;
-  double dU = (double)timeSieve * (double)temp / 
+  double dU = (double)timeSieve * (double)temp /
     (double)nbrCongruencesFound;
   int u = (int)dU;
   char *ptrText = SIQSInfo;
@@ -964,7 +964,7 @@ static int PerformTrialDivision(const PrimeSieveData *primeSieveData,
   bool oddPolynomial)
 {
   int biR0 = 0;
-  int biR1 = 0;  
+  int biR1 = 0;
   int biR2 = 0;
   int biR3 = 0;
   int biR4 = 0;
@@ -1806,7 +1806,7 @@ static void PartialRelationFound(
   while (hashIndex >= 0)
   {
     int oldDivid;
-    
+
     rowPartial = common.siqs.matrixPartial[hashIndex];
     oldDivid = rowPartial[0];
     if ((newDivid == oldDivid) || (newDivid == -oldDivid))
@@ -1867,7 +1867,7 @@ static void PartialRelationFound(
       {
         expParity = 0;
         if ((index >= common.siqs.indexMinFactorA) &&
-            (indexFactorA < common.siqs.nbrFactorsA) && 
+            (indexFactorA < common.siqs.nbrFactorsA) &&
             (index == *(indexFactorsA+indexFactorA)))
         {
           expParity = 1;
@@ -2394,7 +2394,7 @@ void FactoringSIQS(const limb *pNbrToFactor, limb *pFactor)
   while (j < common.siqs.nbrFactorBasePrimes)
   { /* select small primes */
     NbrMod = RemDivBigNbrByInt(common.siqs.Modulus, currentPrime, NumberLength);
-    if ((currentPrime != common.siqs.multiplier) && 
+    if ((currentPrime != common.siqs.multiplier) &&
       (JacobiSymbol(NbrMod, currentPrime) == 1))
     {
       double dBase;
@@ -3233,14 +3233,14 @@ static void sieveThread(BigInteger *result)
         {
           int nbrBytes = NumberLength * (int)sizeof(biT[0]);
           (void)memcpy(biT, biLinearCoeff, nbrBytes);
-        }        
+        }
         ChSignBigNbr(biT, NumberLength);   // Make it positive.
         (void)memcpy(biAbsLinearCoeff, biT, sizeof(biT));
       }
       else
       {
         positive = true;                       // B is positive.
-                                               // Get B mod current prime. 
+                                               // Get B mod current prime.
         (void)memcpy(biAbsLinearCoeff, biLinearCoeff, sizeof(biLinearCoeff));
       }
       for (NumberLengthB = NumberLength; NumberLengthB >= 2; NumberLengthB--)
@@ -3544,11 +3544,11 @@ static int SQUFOF(double N, int queue[])
   for (ctr = 0; ctr <= L; ctr++)
   {
     /* Multiplier == 1 */
-    
+
     // Step 2a for i odd
     q = (S + P) / Q;
     P1 = q*Q - P;
-    
+
     // Step 2b for i odd
     if (Q <= L)
     {
@@ -3575,13 +3575,13 @@ static int SQUFOF(double N, int queue[])
         }
       }
     }
-    
+
        // Step 2c for i odd
     t = Q1 + q*(P - P1);
     Q1 = Q;
     Q = t;
     P = P1;
-    
+
         // Step 2d for i even.
     r = (int)sqrt(Q);
     if (r*r == Q)
@@ -3603,7 +3603,7 @@ static int SQUFOF(double N, int queue[])
             // Step 4a
             qRev = (S + PRev) / QRev;
             P1Rev = qRev*QRev - PRev;
-            
+
             // Step 4b
             if (PRev == P1Rev)
             {
@@ -3614,17 +3614,17 @@ static int SQUFOF(double N, int queue[])
               }
               return QRev;
             }
-            
+
             // Step 4c
             tRev = Q1Rev + qRev*(PRev - P1Rev);
             Q1Rev = QRev;
             QRev = tRev;
             PRev = P1Rev;
-            
+
             // Step 4a
             qRev = (S + PRev) / QRev;
             P1Rev = qRev*QRev - PRev;
-            
+
             // Step 4b
             if (PRev == P1Rev)
             {
@@ -3700,7 +3700,7 @@ static int SQUFOF(double N, int queue[])
     Q1 = Q;
     Q = t;
     P = P1;
-    
+
 
 #if 0
     /* Multiplier == 3 */

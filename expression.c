@@ -113,10 +113,11 @@ static int comprStackValues[COMPR_STACK_SIZE];
 static int comprStackOffset[PAREN_STACK_SIZE];
 extern limb MontgomeryR1[MAX_LEN];
 static int stackIndex;
-#ifndef lang  
+#ifndef lang
   bool lang;
 #endif
 char output[3000000];
+char dumpoutput[3000000];
 limb Mult1[MAX_LEN];
 limb Mult3[MAX_LEN];
 limb Mult4[MAX_LEN];
@@ -184,7 +185,7 @@ static enum eExprErr setStackValue(const BigInteger* pValue)
   return EXPR_OK;
 }
 
-static enum eExprErr PerformGCDorLCM(char token, int stackIndexThreshold, 
+static enum eExprErr PerformGCDorLCM(char token, int stackIndexThreshold,
   int nbrParameters)
 {
   if (nbrParameters <= 0)
@@ -1382,7 +1383,7 @@ enum eExprErr ComputeExpression(const char *ptrStartRPN, BigInteger *ExpressionR
 #endif
       {
         if ((stackIndexThreshold >= stackIndex) && (c != TOKEN_START_EXPON))
-        {         
+        {
           retcode = setStackValue(&curStack);
           if (retcode != EXPR_OK)
           {
@@ -1484,7 +1485,7 @@ static enum eExprErr ComputePartition(void)
   }
   if (pArgument->nbrLimbs == 2)
   {
-    largeVal.x = pArgument->limbs[0].x + 
+    largeVal.x = pArgument->limbs[0].x +
       (int)((unsigned int)pArgument->limbs[1].x << BITS_PER_GROUP);
   }
   else
